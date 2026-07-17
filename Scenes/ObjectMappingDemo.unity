@@ -2934,6 +2934,130 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &368650837
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 368650841}
+  - component: {fileID: 368650840}
+  - component: {fileID: 368650839}
+  - component: {fileID: 368650838}
+  m_Layer: 0
+  m_Name: PMSDK_Projector_B
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &368650838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368650837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2226b19011bd40a6be39d4425c245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: vxpmsdk::vxpmsdk.Components.PMSDKProjectorPoseCalibrator
+  ProjectorCamera: {fileID: 368650840}
+  ModelAnchors:
+  - {fileID: 1481768292}
+  - {fileID: 1575797781}
+  - {fileID: 840484226}
+  - {fileID: 1786329463}
+  - {fileID: 1374325313}
+  - {fileID: 570018891}
+  - {fileID: 712923361}
+  - {fileID: 421806491}
+  - {fileID: 208638341}
+  SolveFieldOfView: 1
+  MarkerSpeed: 0.25
+--- !u!114 &368650839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368650837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af78ad3674d00f34dbd351240618adfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: vxpmsdk::vxpmsdk.Components.PMSDKProjector
+  AspectRatio: 1.777
+  ThrowRatio: 1.2
+--- !u!20 &368650840
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368650837}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.1
+  far clip plane: 50
+  field of view: 38
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 2
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &368650841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368650837}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.020461135, y: -0.53784186, z: 0.013059099, w: 0.84269625}
+  m_LocalPosition: {x: 5.6, y: 1.9, z: -2.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &395624786
 Mesh:
   m_ObjectHideFlags: 0
@@ -7370,3 +7494,4 @@ SceneRoots:
   - {fileID: 1201146531}
   - {fileID: 1761397735}
   - {fileID: 837246329}
+  - {fileID: 368650841}
