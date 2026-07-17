@@ -12,9 +12,6 @@ namespace ProjectionMappingSample {
     // operator console (calibration HUD, Display 1) stays on the primary monitor.
     public static class PMSDKFullscreenPreview {
         private const string WindowMarker = "PMSDK_Fullscreen_Preview";
-        // The Game view draws its own toolbar; shifting the window up parks the
-        // toolbar above the monitor's top edge so the projector shows only output.
-        private const float ToolbarHeight = 21f;
 
         [MenuItem("Tools/Projection Mapping/Fullscreen Previews/Open")]
         public static void Open() {
@@ -24,6 +21,9 @@ namespace ProjectionMappingSample {
             float pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
             Type gameViewType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
             PropertyInfo targetDisplay = gameViewType.GetProperty("targetDisplay", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            // GameView inherits PlayModeView.showToolbar; hiding the toolbar beats
+            // offset tricks (the window manager clamps windows back onto the screen).
+            PropertyInfo showToolbar = gameViewType.GetProperty("showToolbar", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             int displayIndex = 1; // Camera targetDisplay 1 == "Display 2"
             foreach (MonitorRect monitor in monitors) {
                 if (monitor.isPrimary) {
@@ -34,11 +34,14 @@ namespace ProjectionMappingSample {
                 if (targetDisplay != null) {
                     targetDisplay.SetValue(window, displayIndex, null);
                 }
+                if (showToolbar != null) {
+                    showToolbar.SetValue(window, false, null);
+                }
                 Rect rect = new Rect(
                     monitor.x / pixelsPerPoint,
-                    monitor.y / pixelsPerPoint - ToolbarHeight,
+                    monitor.y / pixelsPerPoint,
                     monitor.width / pixelsPerPoint,
-                    monitor.height / pixelsPerPoint + ToolbarHeight);
+                    monitor.height / pixelsPerPoint);
                 window.ShowPopup();
                 window.minSize = new Vector2(rect.width, rect.height);
                 window.maxSize = window.minSize;
