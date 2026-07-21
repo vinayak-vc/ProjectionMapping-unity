@@ -71,7 +71,7 @@ MonoBehaviour:
       companyName: ViitorCloud
       bundleId: 
       version: 1.0.1
-      versionCode: 0
+      versionCode: 2
       icon: {fileID: 0}
       splashScreenLogo: {fileID: 0}
       splashScreenLogoBg: {fileID: 0}
