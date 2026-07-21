@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa29d49660c3bb41aa797445b9dbc0f, type: 3}
+  m_Name: HoloTrackDemoConfig
+  m_EditorClassIdentifier: vxholotrack::vxholotrack.HeadTrackingConfig
+  filterType: 2
+  expAlpha: 0.5
+  oneEuroMinCutoff: 1
+  oneEuroBeta: 0.007
+  oneEuroDCutoff: 1
+  kalmanProcessVar: 0.01
+  kalmanMeasVar: 0.1
+  selection: 0
+  hysteresisMargin: 0.15
+  hysteresisFrames: 8
+  associationMaxDistance: 0.6
+  minDepth: 0.3
+  maxDepth: 6
+  predictionTime: 0.5
+  lostTimeout: 1
+  cameraVFovRad: 1.2
+  headHeightFraction: 0.9
+  bodyHeadOffset: 0
+  movementScale: 1
+  deadZone: 0
+  maxDistance: 3
+  minDistanceClamp: 0
+  calibTranslation: {x: 0, y: 0, z: 0}
+  calibEuler: {x: 0, y: 0, z: 0}
+  calibScale: 1
