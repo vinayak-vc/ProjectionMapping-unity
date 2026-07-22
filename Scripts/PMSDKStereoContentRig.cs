@@ -27,6 +27,8 @@ namespace ProjectionMappingSample {
         public Texture SbsSource;
         [Tooltip("When true, an external driver (e.g. HeadTrackedStereoController) sets each eye camera's view/projection every frame; the rig skips its own symmetric off-axis shear. Use for head-tracked fish-tank stereo.")]
         public bool ExternalEyeMatrices = false;
+        [Tooltip("Render the two eyes straight into the left/right halves of THIS display (viewport split), instead of into RenderTextures for a projector composer. Use for a direct SBS-3D display/projector (3D SBS mode stretches each half x2). No composer/RenderTexture needed.")]
+        public bool DirectScreenSbs = false;
 
         private Camera baseCamera;
         private Camera leftCamera;
@@ -99,8 +101,8 @@ namespace ProjectionMappingSample {
             bool wantEyeCameras = StereoActive && Source == StereoSource.SceneCameras;
             if (wantEyeCameras) {
                 EnsureEyes();
-                UpdateEye(leftCamera, -0.5f * EyeSeparation, leftTexture);
-                UpdateEye(rightCamera, 0.5f * EyeSeparation, rightTexture);
+                UpdateEye(leftCamera, -0.5f * EyeSeparation, leftTexture, false);
+                UpdateEye(rightCamera, 0.5f * EyeSeparation, rightTexture, true);
             } else {
                 if (leftCamera != null) {
                     leftCamera.enabled = false;
@@ -159,15 +161,18 @@ namespace ProjectionMappingSample {
         }
 
         private void EnsureEyes() {
-            if (leftTexture == null) {
-                leftTexture = new RenderTexture(1920, 1080, 24);
-                leftTexture.name = "PMSDK_Stereo_L";
-                leftTexture.hideFlags = HideFlags.DontSave;
-            }
-            if (rightTexture == null) {
-                rightTexture = new RenderTexture(1920, 1080, 24);
-                rightTexture.name = "PMSDK_Stereo_R";
-                rightTexture.hideFlags = HideFlags.DontSave;
+            // Direct-to-screen SBS renders straight into display halves, so no eye RenderTextures.
+            if (!DirectScreenSbs) {
+                if (leftTexture == null) {
+                    leftTexture = new RenderTexture(1920, 1080, 24);
+                    leftTexture.name = "PMSDK_Stereo_L";
+                    leftTexture.hideFlags = HideFlags.DontSave;
+                }
+                if (rightTexture == null) {
+                    rightTexture = new RenderTexture(1920, 1080, 24);
+                    rightTexture.name = "PMSDK_Stereo_R";
+                    rightTexture.hideFlags = HideFlags.DontSave;
+                }
             }
             if (leftCamera == null) {
                 leftCamera = CreateEyeCamera("PMSDK Stereo Eye L");
@@ -186,9 +191,17 @@ namespace ProjectionMappingSample {
             return cam;
         }
 
-        private void UpdateEye(Camera eye, float lateralOffset, RenderTexture target) {
+        private void UpdateEye(Camera eye, float lateralOffset, RenderTexture target, bool isRight) {
             eye.CopyFrom(baseCamera);
-            eye.targetTexture = target;
+            if (DirectScreenSbs) {
+                // Direct SBS-3D: render this eye into half the display; the projector's 3D SBS
+                // mode stretches each half x2. No RenderTexture / composer required.
+                eye.targetTexture = null;
+                eye.rect = isRight ? new Rect(0.5f, 0f, 0.5f, 1f) : new Rect(0f, 0f, 0.5f, 1f);
+            } else {
+                eye.targetTexture = target;
+                eye.rect = new Rect(0f, 0f, 1f, 1f);
+            }
             eye.enabled = true;
             if (ExternalEyeMatrices) {
                 // An external head-tracked driver sets worldToCameraMatrix/projectionMatrix (and

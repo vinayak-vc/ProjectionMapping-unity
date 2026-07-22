@@ -41,6 +41,7 @@ namespace ProjectionMappingSample {
             // where LateUpdate below head-tracks the (re-enabled) base camera.
             rig.Source = PMSDKStereoContentRig.StereoSource.SceneCameras;
             rig.ExternalEyeMatrices = true;
+            rig.DirectScreenSbs = true; // eyes render into left/right screen halves = SBS-3D output
             rig.StereoActive = true;
             rig.EnsureEyeCameras();
             controller.SetEyeCameras(rig.LeftEyeCamera, rig.RightEyeCamera);
