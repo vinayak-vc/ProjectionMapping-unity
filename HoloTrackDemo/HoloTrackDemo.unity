@@ -602,7 +602,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1042344136}
-  - component: {fileID: 1042344135}
+  - component: {fileID: 1042344137}
   m_Layer: 0
   m_Name: SimSource
   m_TagString: Untagged
@@ -610,21 +610,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1042344135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042344134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd1f12bb20f80464ebcb7b7e68d56342, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: vxholotrack::vxholotrack.PMHTSimulatedSource
-  headProxy: {fileID: 843238134}
-  confidence: 0.95
-  emitPoseKeypoints: 1
 --- !u!4 &1042344136
 Transform:
   m_ObjectHideFlags: 0
@@ -640,6 +625,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1042344137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042344134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90d00a9dd4a04c24894dd01047ba5f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: vxholotrack::vxholotrack.PMHTOakSource
+  detectionMode: 0
+  blobPath: C:\SDKs\depthai-blobs\mobilenet-ssd.blob
+  faceBlobPath: 
+  faceFallbackFrames: 15
+  personLabel: 15
+  confidenceThreshold: 0.5
+  depthLowerThresholdMm: 300
+  depthUpperThresholdMm: 8000
 --- !u!1 &1194836755
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,7 +787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: vxholotrack::vxholotrack.PMHTHeadTracker
   config: {fileID: 11400000, guid: 879ae07a7b9bff448a6ed89c078554b5, type: 2}
-  sourceBehaviour: {fileID: 1042344135}
+  sourceBehaviour: {fileID: 1042344137}
   maxDetections: 16
 --- !u!4 &1259645175
 Transform:

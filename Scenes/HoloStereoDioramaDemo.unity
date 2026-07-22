@@ -1525,6 +1525,57 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186404904}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1248999668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1248999670}
+  - component: {fileID: 1248999669}
+  m_Layer: 0
+  m_Name: HeadTrackingDiagnostics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1248999669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248999668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7237de98b0af6904d83ac5e28fdf26c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: vxholotrack::vxholotrack.HeadTrackingDiagnostics
+  tracker: {fileID: 1282328413}
+  surface: {fileID: 1546006514}
+  showOverlay: 1
+  overlayOrigin: {x: 12, y: 12}
+  drawHeadPoint: 1
+  drawFrustum: 1
+  headGizmoRadius: 0.05
+--- !u!4 &1248999670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248999668}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.19056, y: 0, z: 1.94838}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1282328412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,8 +1606,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8e6ca5a448e564ba4b6e3851ad424c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: vxholotrack::vxholotrack.PMHTHeadTracker
-  config: {fileID: 0}
-  sourceBehaviour: {fileID: 1282328414}
+  config: {fileID: 11400000, guid: 879ae07a7b9bff448a6ed89c078554b5, type: 2}
+  sourceBehaviour: {fileID: 1758701919}
   maxDetections: 16
 --- !u!114 &1282328414
 MonoBehaviour:
@@ -1565,7 +1616,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1282328412}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd1f12bb20f80464ebcb7b7e68d56342, type: 3}
   m_Name: 
@@ -2516,6 +2567,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1758701918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1758701920}
+  - component: {fileID: 1758701919}
+  m_Layer: 0
+  m_Name: PMHTOakSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1758701919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758701918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90d00a9dd4a04c24894dd01047ba5f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: vxholotrack::vxholotrack.PMHTOakSource
+  detectionMode: 0
+  blobPath: C:\SDKs\depthai-blobs\mobilenet-ssd.blob
+  faceBlobPath: 
+  faceFallbackFrames: 15
+  personLabel: 15
+  confidenceThreshold: 0.5
+  depthLowerThresholdMm: 300
+  depthUpperThresholdMm: 8000
+--- !u!4 &1758701920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758701918}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.19056, y: 0, z: 1.94838}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!21 &1948408063
 Material:
   serializedVersion: 8
@@ -2788,3 +2891,5 @@ SceneRoots:
   - {fileID: 1282328415}
   - {fileID: 1672912289}
   - {fileID: 1358930038}
+  - {fileID: 1758701920}
+  - {fileID: 1248999670}
