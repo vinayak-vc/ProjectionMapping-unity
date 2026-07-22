@@ -25,6 +25,8 @@ namespace ProjectionMappingSample {
         public float ZeroParallaxDistance = 6f;
         [Tooltip("Side-by-side source texture (left eye in the left half) when Source is SbsTexture.")]
         public Texture SbsSource;
+        [Tooltip("When true, an external driver (e.g. HeadTrackedStereoController) sets each eye camera's view/projection every frame; the rig skips its own symmetric off-axis shear. Use for head-tracked fish-tank stereo.")]
+        public bool ExternalEyeMatrices = false;
 
         private Camera baseCamera;
         private Camera leftCamera;
@@ -80,6 +82,17 @@ namespace ProjectionMappingSample {
                 return new Vector4(0.5f, 1f, rightEye ? 0.5f : 0f, 0f);
             }
             return new Vector4(1f, 1f, 0f, 0f);
+        }
+
+        // Runtime eye cameras (created on demand). Null until the eye pair exists; call
+        // EnsureEyeCameras() first when driving them externally (ExternalEyeMatrices).
+        public Camera LeftEyeCamera { get { return leftCamera; } }
+        public Camera RightEyeCamera { get { return rightCamera; } }
+
+        // Force-create the SceneCameras eye pair + render targets so an external driver can grab
+        // and matrix-drive them before stereo is toggled on.
+        public void EnsureEyeCameras() {
+            EnsureEyes();
         }
 
         private void ApplyState() {
@@ -176,6 +189,12 @@ namespace ProjectionMappingSample {
         private void UpdateEye(Camera eye, float lateralOffset, RenderTexture target) {
             eye.CopyFrom(baseCamera);
             eye.targetTexture = target;
+            eye.enabled = true;
+            if (ExternalEyeMatrices) {
+                // An external head-tracked driver sets worldToCameraMatrix/projectionMatrix (and
+                // the eye transform) later in LateUpdate; skip the rig's own symmetric shear.
+                return;
+            }
             eye.transform.position = baseCamera.transform.position + baseCamera.transform.right * lateralOffset;
             eye.transform.rotation = baseCamera.transform.rotation;
             // Parallel eyes with an asymmetric frustum: shift the projection so
@@ -184,7 +203,6 @@ namespace ProjectionMappingSample {
             Matrix4x4 projection = baseCamera.projectionMatrix;
             projection.m02 = projection.m02 - projection.m00 * lateralOffset / Mathf.Max(0.01f, ZeroParallaxDistance);
             eye.projectionMatrix = projection;
-            eye.enabled = true;
         }
 
         private void ReleaseEyes() {
