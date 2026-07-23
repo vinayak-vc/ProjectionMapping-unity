@@ -21,6 +21,9 @@ namespace ProjectionMappingSample {
         [SerializeField] private PMSDKStereoContentRig rig;
         [SerializeField] private HeadTrackedStereoController controller;
 
+        [Tooltip("TRUE: eyes render straight into the display's left/right halves (direct SBS-3D, single display — the diorama demo). FALSE: eyes render into the rig's eye textures so the per-projector PMSDKStereoComposer warps/blends them into the two-projector SBS output (projection-mapping scenes).")]
+        [SerializeField] private bool directScreenSbs = true;
+
         [Header("Mono (stereo-off) head tracking — optional; auto-discovered if unset")]
         [SerializeField] private PMHTHeadTracker tracker;
         [SerializeField] private HeadTrackingDisplaySurface surface;
@@ -41,7 +44,7 @@ namespace ProjectionMappingSample {
             // where LateUpdate below head-tracks the (re-enabled) base camera.
             rig.Source = PMSDKStereoContentRig.StereoSource.SceneCameras;
             rig.ExternalEyeMatrices = true;
-            rig.DirectScreenSbs = true; // eyes render into left/right screen halves = SBS-3D output
+            rig.DirectScreenSbs = directScreenSbs; // direct = single-display SBS; false = through the projection-mapping composer
             rig.StereoActive = true;
             rig.EnsureEyeCameras();
             controller.SetEyeCameras(rig.LeftEyeCamera, rig.RightEyeCamera);
