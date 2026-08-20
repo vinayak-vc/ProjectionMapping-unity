@@ -20,8 +20,10 @@ MonoBehaviour:
     repoPath: 
     applicationType: 0
     scenes:
-    - active: 1
+    - active: 0
       scene: {fileID: 102900000, guid: 5a5282234a0ec1c4d80af333830bdb05, type: 3}
+    - active: 1
+      scene: {fileID: 102900000, guid: a988c7cc3829e4b41be656b278e631c7, type: 3}
     photonID: 
     agoraID: 
     projectSettings:
@@ -71,7 +73,7 @@ MonoBehaviour:
       companyName: ViitorCloud
       bundleId: 
       version: 1.0.1
-      versionCode: 2
+      versionCode: 3
       icon: {fileID: 0}
       splashScreenLogo: {fileID: 0}
       splashScreenLogoBg: {fileID: 0}

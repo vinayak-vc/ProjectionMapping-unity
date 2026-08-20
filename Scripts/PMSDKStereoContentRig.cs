@@ -1,4 +1,7 @@
+﻿using System.IO;
+
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace ProjectionMappingSample {
     // Stereoscopic content source for the projection-mapping rig. Sits on the
@@ -30,6 +33,8 @@ namespace ProjectionMappingSample {
         [Tooltip("Render the two eyes straight into the left/right halves of THIS display (viewport split), instead of into RenderTextures for a projector composer. Use for a direct SBS-3D display/projector (3D SBS mode stretches each half x2). No composer/RenderTexture needed.")]
         public bool DirectScreenSbs = false;
 
+        public VideoPlayer videoPlayer;
+
         private Camera baseCamera;
         private Camera leftCamera;
         private Camera rightCamera;
@@ -41,6 +46,9 @@ namespace ProjectionMappingSample {
 
         private void Awake() {
             baseCamera = GetComponent<Camera>();
+            if (!string.IsNullOrEmpty(videoPlayer.url) && File.Exists(videoPlayer.url)) {
+                videoPlayer.Prepare();
+            }
         }
 
         private void OnDisable() {
@@ -56,7 +64,15 @@ namespace ProjectionMappingSample {
             }
             if (SourceToggleKey != KeyCode.None && Input.GetKeyDown(SourceToggleKey)) {
                 Source = Source == StereoSource.SceneCameras ? StereoSource.SbsTexture : StereoSource.SceneCameras;
-                Debug.Log("[PMSDKStereoContentRig] Source: " + Source);
+                if (Source == StereoSource.SbsTexture) {
+                    videoPlayer.gameObject.SetActive(true);
+                    videoPlayer.frame = 0;
+                    videoPlayer.Play();
+                } else {
+                    videoPlayer.gameObject.SetActive(false);
+                    videoPlayer.Pause();
+                }
+                    Debug.Log("[PMSDKStereoContentRig] Source: " + Source);
             }
             ApplyState();
         }

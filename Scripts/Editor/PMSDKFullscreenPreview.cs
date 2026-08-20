@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 using UnityEditor;
+
 using UnityEngine;
 
 namespace ProjectionMappingSample {
@@ -13,6 +15,31 @@ namespace ProjectionMappingSample {
     public static class PMSDKFullscreenPreview {
         private const string WindowMarker = "PMSDK_Fullscreen_Preview";
 
+        private static bool ArePreviewWindowsOpen() {
+            Type gameViewType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
+
+            UnityEngine.Object[] windows = Resources.FindObjectsOfTypeAll(gameViewType);
+
+            foreach (UnityEngine.Object obj in windows) {
+                EditorWindow window = obj as EditorWindow;
+
+                if (window != null && window.name == WindowMarker) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [MenuItem("Tools/Projection Mapping/Fullscreen Previews/Toggle %#-")]
+        public static void Toggle() {
+            if (ArePreviewWindowsOpen()) {
+                CloseExisting();
+            } else {
+                Open();
+            }
+        }
+
         [MenuItem("Tools/Projection Mapping/Fullscreen Previews/Open")]
         public static void Open() {
             CloseExisting();
@@ -20,10 +47,13 @@ namespace ProjectionMappingSample {
             monitors.Sort(CompareByLeft);
             float pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
             Type gameViewType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
-            PropertyInfo targetDisplay = gameViewType.GetProperty("targetDisplay", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            // GameView inherits PlayModeView.showToolbar; hiding the toolbar beats
-            // offset tricks (the window manager clamps windows back onto the screen).
-            PropertyInfo showToolbar = gameViewType.GetProperty("showToolbar", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            PropertyInfo targetDisplay = FindProperty(gameViewType, "targetDisplay");
+            // showToolbar is declared on the base PlayModeView, not GameView, so it must be
+            // resolved by walking the type hierarchy (a NonPublic lookup on the derived type
+            // alone returns null — which is why the strip used to stay visible). It must also be
+            // set AFTER ShowPopup and re-applied next tick, because the GameView rebuilds (and
+            // re-shows) its toolbar on its first OnGUI.
+            PropertyInfo showToolbar = FindProperty(gameViewType, "showToolbar");
             int displayIndex = 1; // Camera targetDisplay 1 == "Display 2"
             foreach (MonitorRect monitor in monitors) {
                 if (monitor.isPrimary) {
@@ -34,9 +64,6 @@ namespace ProjectionMappingSample {
                 if (targetDisplay != null) {
                     targetDisplay.SetValue(window, displayIndex, null);
                 }
-                if (showToolbar != null) {
-                    showToolbar.SetValue(window, false, null);
-                }
                 Rect rect = new Rect(
                     monitor.x / pixelsPerPoint,
                     monitor.y / pixelsPerPoint,
@@ -46,7 +73,15 @@ namespace ProjectionMappingSample {
                 window.minSize = new Vector2(rect.width, rect.height);
                 window.maxSize = window.minSize;
                 window.position = rect;
+                HideToolbar(window, showToolbar);
+                // Re-apply after the GameView's first OnGUI, which otherwise restores the strip.
+                EditorWindow captured = window;
+                PropertyInfo capturedProp = showToolbar;
+                EditorApplication.delayCall += () => HideToolbar(captured, capturedProp);
                 displayIndex++;
+            }
+            if (showToolbar == null) {
+                Debug.LogWarning("PMSDKFullscreenPreview: could not resolve GameView.showToolbar on this Unity version; the toolbar strip may still show.");
             }
             if (displayIndex == 1) {
                 Debug.LogWarning("PMSDKFullscreenPreview: no secondary monitors found. Connect the projectors as extended displays first.");
@@ -65,6 +100,28 @@ namespace ProjectionMappingSample {
                     window.Close();
                 }
             }
+        }
+
+        // Resolve a property by name anywhere up the type hierarchy (GameView -> PlayModeView -> ...),
+        // including non-public members declared on base classes (a plain GetProperty on the derived
+        // type does not return those).
+        private static PropertyInfo FindProperty(Type type, string name) {
+            for (Type current = type; current != null; current = current.BaseType) {
+                PropertyInfo prop = current.GetProperty(name,
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                if (prop != null) {
+                    return prop;
+                }
+            }
+            return null;
+        }
+
+        private static void HideToolbar(EditorWindow window, PropertyInfo showToolbar) {
+            if (window == null || showToolbar == null || !showToolbar.CanWrite) {
+                return;
+            }
+            showToolbar.SetValue(window, false, null);
+            window.Repaint();
         }
 
         private struct MonitorRect {

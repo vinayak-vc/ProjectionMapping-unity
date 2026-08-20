@@ -2649,7 +2649,7 @@ MonoBehaviour:
   confidenceThreshold: 0.5
   depthLowerThresholdMm: 300
   depthUpperThresholdMm: 8000
-  mirrorX: 0
+  mirrorX: 1
 --- !u!4 &1758701920
 Transform:
   m_ObjectHideFlags: 0
