@@ -1,0 +1,160 @@
+{
+    "version": 1,
+    "name": "SkinSet",
+    "projector": {
+        "id": "PMSDK_Projector_SkinEditor",
+        "resolution": {
+            "x": 965,
+            "y": 372
+        },
+        "displayIndex": 1
+    },
+    "skins": [
+        {
+            "id": "551810cc",
+            "name": "Skin_Rectangle",
+            "shape": "rectangle",
+            "warp": "projective",
+            "vertices": [
+                {
+                    "x": 0.5322916507720947,
+                    "y": 0.5988909602165222
+                },
+                {
+                    "x": 0.6463541388511658,
+                    "y": 0.19316081702709199
+                },
+                {
+                    "x": 0.6546875238418579,
+                    "y": 0.3817005455493927
+                },
+                {
+                    "x": 0.5378503203392029,
+                    "y": 1.0
+                }
+            ],
+            "mask": {
+                "kind": "none",
+                "feather": 0.0,
+                "perEdgeFeather": []
+            },
+            "transform": {
+                "crop": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "rotation": 0,
+                "mirrorX": false,
+                "mirrorY": false
+            },
+            "color": {
+                "gain": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "offset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "gamma": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "opacity": 1.0,
+            "softMask": 0.0,
+            "zOrder": 0,
+            "defaultContent": {
+                "mode": "VideoUrl",
+                "path": "",
+                "url": "C:\\Blastvideo.mp4",
+                "webcamDeviceName": "",
+                "loop": true,
+                "mute": false,
+                "startTime": 0.0,
+                "testPatternType": "Checkerboard",
+                "testPatternSize": 512,
+                "testPatternGridSize": 8
+            }
+        },
+        {
+            "id": "3a74d691",
+            "name": "Skin_Rectangle",
+            "shape": "rectangle",
+            "warp": "projective",
+            "vertices": [
+                {
+                    "x": 0.5378503203392029,
+                    "y": 0.9699434638023377
+                },
+                {
+                    "x": 0.3776116967201233,
+                    "y": 0.3410351276397705
+                },
+                {
+                    "x": 0.3744555413722992,
+                    "y": 0.14599397778511048
+                },
+                {
+                    "x": 0.5322916507720947,
+                    "y": 0.5988909602165222
+                }
+            ],
+            "mask": {
+                "kind": "none",
+                "feather": 0.0,
+                "perEdgeFeather": []
+            },
+            "transform": {
+                "crop": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "rotation": 0,
+                "mirrorX": false,
+                "mirrorY": false
+            },
+            "color": {
+                "gain": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "offset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "gamma": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "opacity": 1.0,
+            "softMask": 0.0,
+            "zOrder": 0,
+            "defaultContent": {
+                "mode": "VideoUrl",
+                "path": "",
+                "url": "C:\\Blastvideo.mp4",
+                "webcamDeviceName": "",
+                "loop": true,
+                "mute": false,
+                "startTime": 0.0,
+                "testPatternType": "Checkerboard",
+                "testPatternSize": 512,
+                "testPatternGridSize": 8
+            }
+        }
+    ],
+    "selectedIndex": 0,
+    "selectedCorner": 0
+}

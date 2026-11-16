@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /c/htb)",
+      "Bash(cp \"/c/Users/RUSHIT~1/AppData/Local/Temp/claude/C--Unity-Multi-Projector-Assets-Games-ProjectionMapping-unity/1f6e4c01-125b-4945-a2c2-bf3c8ee46088/scratchpad/holotrack_build/CMakeLists.txt\" /c/htb/CMakeLists.txt)",
+      "Bash(echo \"copied to C:\\\\\\\\htb\")",
+      "Read(//c//**)"
+    ]
+  }
+}

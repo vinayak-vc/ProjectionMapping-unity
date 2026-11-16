@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 662cc8dca3e922e478fd1c9c57a8073c, type: 3}
+  m_Name: SkinSet
+  m_EditorClassIdentifier: vxpmsdk::vxpmsdk.Components.PMSDKSkinSet
+  Data:
+    version: 1
+    name: SkinSet
+    projector:
+      id: PMSDK_Projector_SkinEditor
+      resolution: {x: 965, y: 372}
+      displayIndex: 1
+    skins:
+    - id: 551810cc
+      name: Skin_Rectangle
+      shape: rectangle
+      warp: projective
+      vertices:
+      - {x: 0.53229165, y: 0.59889096}
+      - {x: 0.64635414, y: 0.19316082}
+      - {x: 0.6546875, y: 0.38170055}
+      - {x: 0.5378503, y: 1}
+      mask:
+        kind: none
+        feather: 0
+        perEdgeFeather: []
+      transform:
+        crop: {x: 0, y: 0, z: 1, w: 1}
+        rotation: 0
+        mirrorX: 0
+        mirrorY: 0
+      color:
+        gain: {x: 1, y: 1, z: 1}
+        offset: {x: 0, y: 0, z: 0}
+        gamma: {x: 1, y: 1, z: 1}
+      opacity: 1
+      softMask: 0
+      zOrder: 0
+      defaultContent:
+        mode: VideoUrl
+        path: 
+        url: C:\Unity\1.mp4
+        webcamDeviceName: 
+        loop: 1
+        mute: 0
+        startTime: 0
+        testPatternType: Checkerboard
+        testPatternSize: 512
+        testPatternGridSize: 8
+    - id: 3a74d691
+      name: Skin_Rectangle
+      shape: rectangle
+      warp: projective
+      vertices:
+      - {x: 0.5378503, y: 0.96994346}
+      - {x: 0.3776117, y: 0.34103513}
+      - {x: 0.37445554, y: 0.14599398}
+      - {x: 0.53229165, y: 0.59889096}
+      mask:
+        kind: none
+        feather: 0
+        perEdgeFeather: []
+      transform:
+        crop: {x: 0, y: 0, z: 1, w: 1}
+        rotation: 0
+        mirrorX: 0
+        mirrorY: 0
+      color:
+        gain: {x: 1, y: 1, z: 1}
+        offset: {x: 0, y: 0, z: 0}
+        gamma: {x: 1, y: 1, z: 1}
+      opacity: 1
+      softMask: 0
+      zOrder: 0
+      defaultContent:
+        mode: VideoUrl
+        path: 
+        url: C:\Unity\2.mp4
+        webcamDeviceName: 
+        loop: 1
+        mute: 0
+        startTime: 0
+        testPatternType: Checkerboard
+        testPatternSize: 512
+        testPatternGridSize: 8
+    selectedIndex: 0
+    selectedCorner: 0
+  SidecarPath: 
