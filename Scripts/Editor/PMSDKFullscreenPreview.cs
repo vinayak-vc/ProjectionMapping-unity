@@ -59,25 +59,7 @@ namespace ProjectionMappingSample {
                 if (monitor.isPrimary) {
                     continue;
                 }
-                EditorWindow window = (EditorWindow)ScriptableObject.CreateInstance(gameViewType);
-                window.name = WindowMarker;
-                if (targetDisplay != null) {
-                    targetDisplay.SetValue(window, displayIndex, null);
-                }
-                Rect rect = new Rect(
-                    monitor.x / pixelsPerPoint,
-                    monitor.y / pixelsPerPoint,
-                    monitor.width / pixelsPerPoint,
-                    monitor.height / pixelsPerPoint);
-                window.ShowPopup();
-                window.minSize = new Vector2(rect.width, rect.height);
-                window.maxSize = window.minSize;
-                window.position = rect;
-                HideToolbar(window, showToolbar);
-                // Re-apply after the GameView's first OnGUI, which otherwise restores the strip.
-                EditorWindow captured = window;
-                PropertyInfo capturedProp = showToolbar;
-                EditorApplication.delayCall += () => HideToolbar(captured, capturedProp);
+                OpenWindow(gameViewType, targetDisplay, showToolbar, monitor, displayIndex, pixelsPerPoint);
                 displayIndex++;
             }
             if (showToolbar == null) {
@@ -88,6 +70,53 @@ namespace ProjectionMappingSample {
             } else {
                 Debug.Log("PMSDKFullscreenPreview: opened " + (displayIndex - 1) + " fullscreen preview(s). Close via Tools > Projection Mapping > Fullscreen Previews > Close.");
             }
+        }
+
+        // For a projector that duplicates the primary monitor: one borderless Game view showing
+        // Display 1 over the whole primary monitor, so the projected raster has no editor strips.
+        [MenuItem("Tools/Projection Mapping/Fullscreen Previews/Open On Primary")]
+        public static void OpenOnPrimary() {
+            CloseExisting();
+            List<MonitorRect> monitors = GetMonitors();
+            Type gameViewType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
+            PropertyInfo targetDisplay = FindProperty(gameViewType, "targetDisplay");
+            PropertyInfo showToolbar = FindProperty(gameViewType, "showToolbar");
+            foreach (MonitorRect monitor in monitors) {
+                if (!monitor.isPrimary) {
+                    continue;
+                }
+                OpenWindow(gameViewType, targetDisplay, showToolbar, monitor, 0, EditorGUIUtility.pixelsPerPoint);
+                // On the primary monitor other apps can cover the preview (and the projector would show them):
+                // keep it on top once the native window exists.
+                MonitorRect captured = monitor;
+                EditorApplication.delayCall += () => KeepOnTop(captured);
+                Debug.Log("PMSDKFullscreenPreview: opened a fullscreen preview of Display 1 on the primary monitor. Close via Tools > Projection Mapping > Fullscreen Previews > Close.");
+                return;
+            }
+            Debug.LogWarning("PMSDKFullscreenPreview: no primary monitor found.");
+        }
+
+        private static void OpenWindow(Type gameViewType, PropertyInfo targetDisplay, PropertyInfo showToolbar, MonitorRect monitor,
+            int displayIndex, float pixelsPerPoint) {
+            EditorWindow window = (EditorWindow)ScriptableObject.CreateInstance(gameViewType);
+            window.name = WindowMarker;
+            if (targetDisplay != null) {
+                targetDisplay.SetValue(window, displayIndex, null);
+            }
+            Rect rect = new Rect(
+                monitor.x / pixelsPerPoint,
+                monitor.y / pixelsPerPoint,
+                monitor.width / pixelsPerPoint,
+                monitor.height / pixelsPerPoint);
+            window.ShowPopup();
+            window.minSize = new Vector2(rect.width, rect.height);
+            window.maxSize = window.minSize;
+            window.position = rect;
+            HideToolbar(window, showToolbar);
+            // Re-apply after the GameView's first OnGUI, which otherwise restores the strip.
+            EditorWindow captured = window;
+            PropertyInfo capturedProp = showToolbar;
+            EditorApplication.delayCall += () => HideToolbar(captured, capturedProp);
         }
 
         [MenuItem("Tools/Projection Mapping/Fullscreen Previews/Close")]
@@ -155,6 +184,50 @@ namespace ProjectionMappingSample {
 
         private delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, ref NativeRect rect, IntPtr data);
 
+        private delegate bool WindowEnumProc(IntPtr window, IntPtr data);
+
+        private static readonly IntPtr TopMost = new IntPtr(-1);
+        private const uint NoSize = 0x0001;
+        private const uint NoMove = 0x0002;
+        private const uint NoActivate = 0x0010;
+
+        [DllImport("user32.dll")]
+        private static extern bool EnumWindows(WindowEnumProc callback, IntPtr data);
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr window, out uint processId);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetWindowRect(IntPtr window, out NativeRect rect);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsWindowVisible(IntPtr window);
+
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowPos(IntPtr window, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
+
+        // The popup is the visible window of this process that covers exactly the monitor.
+        private static void KeepOnTop(MonitorRect monitor) {
+            uint ownProcess = (uint)System.Diagnostics.Process.GetCurrentProcess().Id;
+            int found = 0;
+            WindowEnumProc callback = delegate (IntPtr window, IntPtr data) {
+                uint process;
+                GetWindowThreadProcessId(window, out process);
+                NativeRect rect;
+                if (process == ownProcess && IsWindowVisible(window) && GetWindowRect(window, out rect) &&
+                    rect.left == (int)monitor.x && rect.top == (int)monitor.y &&
+                    rect.right - rect.left == (int)monitor.width && rect.bottom - rect.top == (int)monitor.height) {
+                    SetWindowPos(window, TopMost, 0, 0, 0, 0, NoMove | NoSize | NoActivate);
+                    found++;
+                }
+                return true;
+            };
+            EnumWindows(callback, IntPtr.Zero);
+            if (found == 0) {
+                Debug.LogWarning("PMSDKFullscreenPreview: could not find the preview window to keep it on top; other windows may cover the projection.");
+            }
+        }
+
         [DllImport("user32.dll")]
         private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr clip, MonitorEnumProc callback, IntPtr data);
 
@@ -183,6 +256,9 @@ namespace ProjectionMappingSample {
 #else
         private static List<MonitorRect> GetMonitors() {
             return new List<MonitorRect>();
+        }
+
+        private static void KeepOnTop(MonitorRect monitor) {
         }
 #endif
     }
